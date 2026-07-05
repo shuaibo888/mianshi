@@ -1,0 +1,7 @@
+FROM sushiji/jre17:latest
+WORKDIR /app
+
+COPY backend/mini-ats.jar app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]

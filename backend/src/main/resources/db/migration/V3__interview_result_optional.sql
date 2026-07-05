@@ -1,0 +1,3 @@
+ALTER TABLE interview_record
+    MODIFY COLUMN score DECIMAL(3,1) NULL,
+    MODIFY COLUMN content VARCHAR(2000) NULL;

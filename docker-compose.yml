@@ -1,0 +1,38 @@
+services:
+  miniats-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: miniats-backend
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:mysql://cboo-mysql:3306/mini_ats?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: ${MINIATS_DB_USERNAME:-root}
+      SPRING_DATASOURCE_PASSWORD: ${MINIATS_DB_PASSWORD:?please set MINIATS_DB_PASSWORD in .env}
+      APP_JWT_SECRET: ${MINIATS_JWT_SECRET:?please set MINIATS_JWT_SECRET in .env}
+      APP_UPLOAD_RESUME_DIR: /app/uploads/resumes
+    volumes:
+      - ./uploads:/app/uploads
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - "8080"
+    restart: always
+    networks:
+      - cboo-net
+
+  miniats-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: miniats-frontend
+    expose:
+      - "80"
+    depends_on:
+      - miniats-backend
+    restart: always
+    networks:
+      - cboo-net
+
+networks:
+  cboo-net:
+    external: true
